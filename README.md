@@ -43,10 +43,10 @@ client.login("token");
 
 ## Usage
 
-| Option                 | Type                   | Description                                                                                                                                          |
-|------------------------|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Option                 | Type                   | Description                                                                                                 |
+|------------------------|------------------------|-------------------------------------------------------------------------------------------------------------|
 | apiKey                | String                  | Genius API Key to fetch the lyrics from their API. <br> https://genius.com/api-clients                      |
-| songName              | String                  | Song name to fetch the lyrics.                                                                                                                                                          |
+| songName              | String                  | Song name to fetch the lyrics.                                                                              |                                                                           |
 
 
 
