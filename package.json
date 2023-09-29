@@ -18,8 +18,11 @@
     "url": "git+https://github.com/shittybot/findlyrics.git"
   },
   "keywords": [
+    "lyrics finder",
     "lyrics",
-    "finder"
+    "discord bot",
+    "discord.js",
+    "genius api"
   ],
   "bugs": {
     "url": "https://github.com/shittybot/findlyrics/issues"
