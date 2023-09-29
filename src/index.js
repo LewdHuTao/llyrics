@@ -2,14 +2,14 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 
 async function findLyrics(apiKey, songName) {
-  const api_key = apiKey;
-
-  const songName = songName;
+  let api_key = apiKey;
+  let song_Name = songName;
+  let lyrics;
 
   try {
     const searchResponse = await axios.get("https://api.genius.com/search", {
       params: {
-        q: songName,
+        q: song_Name,
       },
       headers: {
         Authorization: `Bearer ${api_key}`,
@@ -32,7 +32,7 @@ async function findLyrics(apiKey, songName) {
 
           const $ = cheerio.load(lyricsHtml);
 
-          let lyrics = $('div[class="lyrics"]').text().trim();
+          lyrics = $('div[class="lyrics"]').text().trim();
           if (!lyrics) {
             lyrics = "";
             $('div[class^="Lyrics__Container"]').each((i, elem) => {
@@ -46,12 +46,12 @@ async function findLyrics(apiKey, songName) {
             });
           }
           if (!lyrics) throw new Error("No lyrics found");
-          console.log(lyrics.trim());
+          findLyrics.lyrics = lyrics.trim();
         }
       }
     }
   } catch (error) {
-    throw new Error("Error:", error.message || error);
+    throw new Error(error);
   }
 }
 
