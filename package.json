@@ -15,7 +15,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shittybot/findlyrics.git"
+    "url": "git+https://github.com/shittybot/llyrics.git"
   },
   "keywords": [
     "lyrics finder",
@@ -25,7 +25,7 @@
     "genius api"
   ],
   "bugs": {
-    "url": "https://github.com/shittybot/findlyrics/issues"
+    "url": "https://github.com/shittybot/llyrics/issues"
   },
-  "homepage": "https://github.com/shittybot/findlyrics#readme"
+  "homepage": "https://github.com/shittybot/llyrics#readme"
 }

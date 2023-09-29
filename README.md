@@ -21,7 +21,7 @@ yarn add llyrics
 
 ## Example
 ```js
-const llyrics = require("llyrics"); // Import
+const findLyrics = require("llyrics"); // Import
 const { AttachmentBuilder } = require("discord.js");
 
 client.on("interactionCreate", async (message) => {
@@ -29,9 +29,9 @@ client.on("interactionCreate", async (message) => {
     let apiKey = "GENIUS_API_KEY"; // Your Genius API Key
     let songName = "SONG_NAME"; // Song Name
 
-    await llyrics(apiKey, songName);
+    await findLyrics(apiKey, songName);
 
-    const lyrics = llyrics.lyrics;
+    const lyrics = findLyrics.lyrics;
 
     interaction.channel.send({
         content: lyrics,
