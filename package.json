@@ -1,5 +1,5 @@
 {
-  "name": "find-lyrics",
+  "name": "llyrics",
   "version": "1.0.0",
   "description": "A simple package to fetch lyrics from Genius API",
   "main": "src/index.js",
