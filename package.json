@@ -11,5 +11,18 @@
   "dependencies": {
     "axios": "^1.5.1",
     "cheerio": "^1.0.0-rc.12"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shittybot/findlyrics.git"
+  },
+  "keywords": [
+    "lyrics",
+    "finder"
+  ],
+  "bugs": {
+    "url": "https://github.com/shittybot/findlyrics/issues"
+  },
+  "homepage": "https://github.com/shittybot/findlyrics#readme"
 }
