@@ -5,6 +5,8 @@ async function findLyrics(apiKey, songName) {
   let api_key = apiKey;
   let song_Name = songName;
   let lyrics;
+  let trackName; 
+  let trackArtist;
 
   try {
     const searchResponse = await axios.get("https://api.genius.com/search", {
@@ -23,6 +25,10 @@ async function findLyrics(apiKey, songName) {
         searchData.response.hits &&
         searchData.response.hits.length > 0
       ) {
+        trackName = searchData.response.hits[0].result.title;
+
+        trackArtist = searchData.response.hits[0].result.primary_artist.name;
+        
         const songUrl = searchData.response.hits[0].result.url;
 
         const lyricsResponse = await axios.get(songUrl);
@@ -47,6 +53,8 @@ async function findLyrics(apiKey, songName) {
           }
           if (!lyrics) throw new Error("No lyrics found");
           findLyrics.lyrics = lyrics.trim();
+          findLyrics.trackName = trackName;
+          findLyrics.trackArtist = trackArtist;
         }
       }
     }
