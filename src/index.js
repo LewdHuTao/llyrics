@@ -19,7 +19,6 @@ async function findLyrics(apiKey, songName) {
           findLyrics.lyrics = lyrics;
           findLyrics.trackName = trackName;
           findLyrics.trackArtist = trackArtist;
-          console.log(lyrics);
         }
   } catch (error) {
     throw new Error(error);
