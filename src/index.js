@@ -1,5 +1,5 @@
 async function findLyrics({
-  search_engine: { musixmatch, genius },
+  search_engine: { musixmatch, genius, youtube },
   song_title,
   genius_api,
 }) {
@@ -11,6 +11,8 @@ async function findLyrics({
   let trackArtist;
   let artworkUrl;
   let searchEngine;
+
+  const fetch = (await import("node-fetch")).default;
 
   try {
     if (musixmatch === true) {
@@ -24,22 +26,13 @@ async function findLyrics({
       searchEngine = musixmatchData.search_engine;
       artworkUrl = musixmatchData.artwork_url;
       lyrics = musixmatchData.lyrics;
+    }
 
-      if (!lyrics && genius === true) {
-        const geniusResponse = await fetch(
-          `${apiBaseUrl}/genius/lyrics?title=${encodeURIComponent(songTitle)}&api_key=${genius_api}`
-        );
-        const geniusData = await geniusResponse.json();
-
-        trackArtist = geniusData.artist_name;
-        trackName = geniusData.track_name;
-        searchEngine = geniusData.search_engine;
-        artworkUrl = geniusData.artworkUrl;
-        lyrics = geniusData.lyrics;
-      }
-    } else if (genius === true) {
+    if (!lyrics && genius === true) {
       const geniusResponse = await fetch(
-        `${apiBaseUrl}/genius/lyrics?title=${encodeURIComponent(songTitle)}&api_key=${genius_api}`
+        `${apiBaseUrl}/genius/lyrics?title=${encodeURIComponent(
+          songTitle
+        )}&api_key=${genius_api}`
       );
       const geniusData = await geniusResponse.json();
 
@@ -48,8 +41,20 @@ async function findLyrics({
       searchEngine = geniusData.search_engine;
       artworkUrl = geniusData.artworkUrl;
       lyrics = geniusData.lyrics;
-    } else {
-      throw new Error("Both Musixmatch and Genius are disabled.");
+    }
+
+    if (!lyrics && youtube === true) {
+      const youtubeResponse = await fetch(
+        `${apiBaseUrl}/youtube/lyrics?title=${encodeURIComponent(songTitle)}`
+      );
+
+      const youtubeData = await youtubeResponse.json();
+
+      trackArtist = youtubeData.artist_name;
+      trackName = youtubeData.track_name;
+      searchEngine = youtubeData.search_engine;
+      artworkUrl = youtubeData.artwork_url;
+      lyrics = youtubeData.lyrics;
     }
 
     if (!lyrics) {
@@ -65,7 +70,7 @@ async function findLyrics({
     trackName,
     searchEngine,
     artworkUrl,
-    lyrics
+    lyrics,
   };
 }
 
