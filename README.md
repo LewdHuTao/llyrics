@@ -1,50 +1,72 @@
 <div align="center">
   <h1>llyrics</h1>
-  <p>A simple package to fetch lyrics from Genius API.</p>
   <p>
   <a href="https://www.npmjs.com/package/llyrics"><img src="https://img.shields.io/npm/v/llyrics?maxAge=3600" alt="NPM version" /></a>
   <p>
   <p>
     <a href="https://www.npmjs.com/package/llyrics"><img src="https://nodei.co/npm/llyrics.png?downloads=true&stars=true" alt="NPM Banner"></a>
   </p>
+  <p><b>A simple package to fetch lyrics from Genius API.</b></p>
 
-  <p>This package was originally used only for my personal needs to fetch lyrics from Genius API using my discord bot, but then I decided to make this package open source and let everyone use it.</p>
+  <p><i>This package was originally used only for my personal needs to fetch lyrics from Genius API using my discord bot, but then I decided to make this package open source and let everyone use it.</i></p>
   </div>
   <br>
 
-  ## Install
+# 🪓 Installation
 ```sh
-npm install llyrics
-# or
-yarn add llyrics
+$ npm install llyrics
+$ yarn add llyrics
 ```
 
-## Example
+
+# 💾 Example
 ```js
-const findLyrics = require("llyrics"); // Import llyrics
+const { Llyrics } = require('llyrics');
 
-client.on("interactionCreate", async (message) => {
-    
-    let apiKey = "GENIUS_API_KEY"; // Your Genius API Key
-    let songName = "SONG_NAME"; // Song Name
+const llyrics = new Llyrics('Genius API KEY (optional)');
 
-    await findLyrics(apiKey, songName);
+client.on(Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return;
 
-    const lyrics = findLyrics.lyrics; // To get the lyrics
-    const trackName = findLyrics.trackName; // To get the Track Name
-    const trackArtist = findLyrics.trackArtist; // To get the Track Artis
-
-    interaction.channel.send({
-        content: lyrics,
+    const response = await llyrics.find({
+        song: 'Bohemian Rhapsody',
+        engine: 'musixmatch'
     });
+
+    console.log(response.artist);
+
+	if (interaction.commandName === 'lyrics') {
+		await interaction.reply({ content: response.lyrics, ephemeral: true });
+	}
 });
 
-client.login("token");
+client.login('token');
 ```
 
-## Usage
+# 🔧 Usage
 
-| Option                 | Type                   | Description                                                                                                 |
-|------------------------|------------------------|-------------------------------------------------------------------------------------------------------------|
-| apiKey                | String                  | Genius API Key to fetch the lyrics from their API. <br> https://genius.com/api-clients                      |
-| songName              | String                  | Song name to fetch the lyrics.                                                                              |                                                                           |
+**Response format**
+```
+{
+  artist: string,
+  title: string,
+  id?: number,
+  engine: string,
+  atworkURL: string,
+  lyrics: string,
+}
+```
+
+*Note: the id is only available if the request was made with Musixmatch. This corresponds to the Musixmatch identifier of the song.*
+
+The default search engine is Genius, so if you want to use it, a Genius API key is required.
+
+**Available search engines**
+
+```
+genius
+musixmatch
+youtube
+```
+
+## **Made by LewdHuTao, rewritten with ❤ by RemyK**
