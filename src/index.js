@@ -1,10 +1,12 @@
 async function findLyrics({
-  search_engine: { musixmatch, genius, youtube },
-  song_title,
-  genius_api,
+  search_engine: { musixmatch, genius, youtube }, // search engine
+  song_title, // required
+  artist_name, // optional
+  genius_api, // optional if genius is set to false
 }) {
-  let apiBaseUrl = "https://lyrics.lewdhutao.my.eu.org";
+  let apiBaseUrl = "https://lyrics.lewdhutao.my.eu.org"; // api url
   let songTitle = song_title;
+  let artistName = artist_name;
 
   let lyrics;
   let trackName;
@@ -16,9 +18,21 @@ async function findLyrics({
 
   try {
     if (musixmatch === true) {
-      const musixmatchResponse = await fetch(
-        `${apiBaseUrl}/musixmatch/lyrics?title=${encodeURIComponent(songTitle)}`
-      );
+      let musixmatchResponse;
+
+      if (artistName) {
+        musixmatchResponse = await fetch(
+          `${apiBaseUrl}/musixmatch/lyrics-search?title=${encodeURIComponent(
+            songTitle
+          )}&artist=${artistName}`
+        );
+      } else {
+        musixmatchResponse = await fetch(
+          `${apiBaseUrl}/musixmatch/lyrics?title=${encodeURIComponent(
+            songTitle
+          )}`
+        );
+      }
       const musixmatchData = await musixmatchResponse.json();
 
       trackArtist = musixmatchData.artist_name;
@@ -56,13 +70,8 @@ async function findLyrics({
       artworkUrl = youtubeData.artwork_url;
       lyrics = youtubeData.lyrics;
     }
-
-    if (!lyrics) {
-      throw new Error("No lyrics found.");
-    }
   } catch (error) {
-    console.error("Error:", error.message);
-    throw error;
+    return;
   }
 
   return {

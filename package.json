@@ -1,6 +1,6 @@
 {
   "name": "llyrics",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A simple package to fetch lyrics from Genius API",
   "main": "src/index.js",
   "scripts": {
@@ -20,7 +20,9 @@
     "lyrics",
     "discord bot",
     "discord.js",
-    "genius api"
+    "genius api",
+    "musixmatch",
+    "youtube lyrics"
   ],
   "bugs": {
     "url": "https://github.com/shittybot/llyrics/issues"
