@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { version } from '../package.json';
 
 interface searchOptions {
   /**
@@ -30,6 +31,12 @@ interface defaultResponse {
   title: string;
 
   /**
+   * The MusixMatch song id.
+   * 0 if the request is made using another search engine
+   */
+  id: string;
+
+  /**
    * Used search engine
    */
   engine: string;
@@ -43,13 +50,6 @@ interface defaultResponse {
    * The song lyrics
    */
   lyrics: string;
-}
-
-interface musixMatchResponse extends defaultResponse {
-  /**
-   * The Musixmatch id
-   */
-  id: number;
 }
 
 type searchEngineOptions = 'musixmatch' | 'genius' | 'youtube';
@@ -74,6 +74,13 @@ export class Llyrics {
   }
 
   /**
+   * Get the version of the package
+   */
+  get version(): string {
+    return version;
+  }
+
+  /**
    * Finds the lyrics of a song.
    * @param {searchOptions} searchOptions Options to refine your search
    * @returns Promise<defaultResponse | musixMatchResponse>
@@ -85,37 +92,34 @@ export class Llyrics {
    * });
    * console.log(response.artist);
    */
-  public async find(searchOptions: searchOptions): Promise<defaultResponse | musixMatchResponse> {
+  public async find(searchOptions: searchOptions): Promise<defaultResponse> {
     if ((searchOptions.engine === undefined || searchOptions.engine === 'genius') && this.geniusApiKey === undefined)
       throw new TypeError('A genius API key is required.');
+    const fetchParams = {
+      title: searchOptions.song,
+    };
     switch (searchOptions.engine) {
       case 'musixmatch': {
-        const musixmatchFetchResponse = await axios.get(
-          `${apiBaseUrl}/musixmatch/lyrics?title=${encodeURIComponent(searchOptions.song)}${searchOptions.artist === undefined ? '' : '&artist=' + encodeURIComponent(searchOptions.artist)}`,
-        );
-        return {
-          artist: musixmatchFetchResponse.data.artist_name,
-          title: musixmatchFetchResponse.data.track_name,
-          id: musixmatchFetchResponse.data.track_id,
-          engine: musixmatchFetchResponse.data.asearch_engine,
-          atworkURL: musixmatchFetchResponse.data.artwork_url,
-          lyrics: musixmatchFetchResponse.data.lyrics,
-        };
+        if (searchOptions.artist) Object.assign(fetchParams, { artist: searchOptions.artist });
+        break;
       }
-      case 'youtube':
       case 'genius':
       default: {
-        const fetchResponse = await axios.get(
-          `${apiBaseUrl}/${searchOptions.engine === 'youtube' ? 'youtube' : 'genius'}/lyrics?title=${encodeURIComponent(searchOptions.song)}${searchOptions.engine === 'youtube' ? '' : '$api_key=' + encodeURIComponent(this.geniusApiKey as string)}`,
-        );
-        return {
-          artist: fetchResponse.data.artist_name,
-          title: fetchResponse.data.track_name,
-          engine: fetchResponse.data.asearch_engine,
-          atworkURL: fetchResponse.data.artwork_url,
-          lyrics: fetchResponse.data.lyrics,
-        };
+        Object.assign(fetchParams, { api_key: this.geniusApiKey as string });
+        break;
       }
     }
+    const fetchResponse = await axios.get(
+      `${apiBaseUrl}/${searchOptions.engine !== undefined ? searchOptions.engine : 'genius'}/lyrics`,
+      { params: fetchParams },
+    );
+    return {
+      artist: fetchResponse.data.artist_name,
+      title: fetchResponse.data.track_name,
+      id: fetchResponse.data.track_id !== undefined ? fetchResponse.data.track_id : 0,
+      engine: fetchResponse.data.asearch_engine,
+      atworkURL: fetchResponse.data.artwork_url,
+      lyrics: fetchResponse.data.lyrics,
+    };
   }
 }
