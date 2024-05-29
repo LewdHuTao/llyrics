@@ -21,14 +21,12 @@ $ yarn add llyrics
 
 # 💾 Example
 ```js
-const { Llyrics } = require('llyrics');
-
-const llyrics = new Llyrics('Genius API KEY (optional)');
+const { find } = require('llyrics');
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
-    const response = await llyrics.find({
+    const response = await find({
         song: 'Bohemian Rhapsody',
         engine: 'musixmatch'
     });
@@ -45,28 +43,36 @@ client.login('token');
 
 # 🔧 Usage
 
+**Function parameters**
+
+```
+{
+  song: string,
+  artist?: string,
+  geniusApiKey?: string,
+  engine?: 'musixmatch' | 'genius' | 'youtube',
+  forceSearch?: boolean
+}
+```
+
+The force search method requires a Genius API key and automatically changes search engine if the song is not found.
+
 **Response format**
 ```
 {
   artist: string,
   title: string,
-  id?: number,
+  id: number,
   engine: string,
   atworkURL: string,
   lyrics: string,
+  status: number
 }
 ```
 
-*Note: the id is only available if the request was made with Musixmatch. This corresponds to the Musixmatch identifier of the song.*
+*Note: the id is only available if the request was made with Musixmatch, otherwise it will be 0. This corresponds to the Musixmatch identifier of the song.*
 
-The default search engine is Genius, so if you want to use it, a Genius API key is required.
+The default search engine is Genius, so in order to use it, a Genius API key is required.
 
-**Available search engines**
-
-```
-genius
-musixmatch
-youtube
-```
 
 ## **Made by LewdHuTao, rewritten with ❤ by RemyK**
