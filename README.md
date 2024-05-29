@@ -12,6 +12,14 @@
   </div>
   <br>
 
+# 💫 Features
+
+- **TypeScript Support**: llyrics is written in TypeScript, providing type safety and ease of use. Thanks to [RemyK](https://github.com/RemyK888) for Typescript rewrite ❤.
+- **Support for Different Sources**: You can search for lyrics from YouTube, Musixmatch, or Genius by specifying the desired source(s) in the search options.
+- **Auto Search**: If a search fails on the first specified search engine, llyrics automatically retries the search on another available search engine for a better lyrics result.
+- **Easy to Use**: You can quickly search for song lyrics by providing the song title and, optionally, the artist name.
+
+
 # 🪓 Installation
 ```sh
 $ npm install llyrics
@@ -28,10 +36,9 @@ client.on(Events.InteractionCreate, async interaction => {
 
     const response = await find({
         song: 'Bohemian Rhapsody',
-        engine: 'musixmatch'
+        engine: 'youtube'
+        forceSearch: true,
     });
-
-    console.log(response.artist);
 
 	if (interaction.commandName === 'lyrics') {
 		await interaction.reply({ content: response.lyrics, ephemeral: true });
@@ -45,34 +52,31 @@ client.login('token');
 
 **Function parameters**
 
-```
+```js
 {
-  song: string,
-  artist?: string,
-  geniusApiKey?: string,
-  engine?: 'musixmatch' | 'genius' | 'youtube',
-  forceSearch?: boolean
+  song: string,                                 // The title of the song
+  artist?: string,                              // Optional: Use this for more accurate lyrics results on the Musixmatch endpoint
+  geniusApiKey?: string,                        // Optional: API key for the Genius search engine
+  engine?: 'musixmatch' | 'genius' | 'youtube', // Specify the desired search engine: 'musixmatch', 'genius', or 'youtube'
+  forceSearch?: boolean                         // Optional: If true and the search fails on the first specified search engine, llyrics automatically retries the search on another available search engine
 }
+
 ```
 
-The force search method requires a Genius API key and automatically changes search engine if the song is not found.
 
 **Response format**
-```
+```js
 {
-  artist: string,
-  title: string,
-  id: number,
-  engine: string,
-  atworkURL: string,
-  lyrics: string,
-  status: number
+  artist: string,     // Artist's name
+  title: string,      // Song title
+  id: number,         // Musixmatch track ID (only for Musixmatch endpoint)
+  engine: string,     // Search engine used
+  artworkURL: string, // Artwork URL
+  lyrics: string,     // Song lyrics
 }
 ```
 
-*Note: the id is only available if the request was made with Musixmatch, otherwise it will be 0. This corresponds to the Musixmatch identifier of the song.*
+*Note: the id is only available if the request was made with Musixmatch. This corresponds to the Musixmatch identifier of the song.*
 
-The default search engine is Genius, so in order to use it, a Genius API key is required.
+The default search engine is YouTube. If you prefer not to use YouTube, you can specify your desired search engine.
 
-
-## **Made by LewdHuTao, rewritten with ❤ by RemyK**

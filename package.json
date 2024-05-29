@@ -1,6 +1,6 @@
 {
   "name": "llyrics",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "A simple package to fetch lyrics from Genius API",
   "main": "./index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc && gen-esm-wrapper ./dist/index.js ./dist/index.mjs",
     "docs": "ts-docs",
     "fix": "eslint src --ext .ts --fix",
-    "test": "ts-node ./test/index.ts"
+    "test": "ts-node ./test/index.test.ts"
   },
   "author": "LewdHuTao",
   "license": "ISC",
