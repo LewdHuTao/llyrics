@@ -16,7 +16,7 @@ interface searchOptions {
    * Search engine. 3 search engines are available : Genius, Musixmatch and youTube
    * Genius is used by default, so make sure to have a Genius API key.
    */
-  engine?: searchEngineOptions;
+  engine?: searchEngineOptions | string;
 
   /**
    * A Genius API key, to fetch Genius
@@ -55,7 +55,7 @@ interface fetchResponse {
   /**
    * Cover URL
    */
-  atworkURL: string;
+  artworkURL: string;
 
   /**
    * The song lyrics
@@ -69,7 +69,7 @@ interface fetchResponse {
 }
 
 const apiBaseUrl = 'https://lyrics.lewdhutao.my.eu.org';
-const searchEngines = ['musixmatch', 'genius', 'youtube'] as const;
+const searchEngines = ['youtube', 'musixmatch', 'genius'] as const;
 
 type searchEngineOptions = (typeof searchEngines)[number];
 
@@ -86,31 +86,36 @@ type searchEngineOptions = (typeof searchEngines)[number];
  * console.log(response.artist);
  */
 async function find(searchOptions: searchOptions): Promise<fetchResponse> {
-  if (
-    (searchOptions.engine === undefined || searchOptions.engine === 'genius' || searchOptions.forceSearch === true) &&
-    searchOptions.geniusApiKey === undefined
-  )
+  if (searchOptions.engine === 'genius' && searchOptions.geniusApiKey === undefined)
     throw new TypeError('A genius API key is required.');
+
   const fetchParams = {
     title: searchOptions.song,
   };
+
   if (searchOptions.forceSearch === true) {
-    for (const currentEngine of searchEngines[Symbol.iterator]()) {
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const iterationSearch = await find({
-        song: searchOptions.song,
-        geniusApiKey: searchOptions.geniusApiKey,
-        engine: currentEngine as any,
-      });
-      if (
-        iterationSearch.status !== 200 ||
-        iterationSearch.artist === undefined ||
-        currentEngine !== searchEngines.at(-1)
-      )
+    const enginesToSearch = searchOptions.geniusApiKey ? searchEngines : ['youtube', 'musixmatch'];
+
+    for (const currentEngine of enginesToSearch) {
+      try {
+        const iterationSearch = await find({
+          song: searchOptions.song,
+          geniusApiKey: searchOptions.geniusApiKey,
+          engine: currentEngine,
+        });
+
+        if (
+          iterationSearch.status === 200 &&
+          iterationSearch.artist !== undefined
+        ) {
+          return iterationSearch;
+        }
+      } catch (error) {
         continue;
-      else return iterationSearch;
+      }
     }
   }
+
   switch (searchOptions.engine) {
     case 'musixmatch': {
       if (searchOptions.artist) Object.assign(fetchParams, { artist: searchOptions.artist });
@@ -122,19 +127,21 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
       break;
     }
   }
+
   const fetchResponse = await axios.get(
-    `${apiBaseUrl}/${searchOptions.engine !== undefined ? searchOptions.engine : 'genius'}/lyrics`,
+    `${apiBaseUrl}/${searchOptions.engine !== undefined ? searchOptions.engine : 'youtube'}/lyrics`,
     { params: fetchParams },
   );
   return {
     artist: fetchResponse.data.artist_name,
     title: fetchResponse.data.track_name,
     id: fetchResponse.data.track_id !== undefined ? fetchResponse.data.track_id : 0,
-    engine: fetchResponse.data.asearch_engine,
-    atworkURL: fetchResponse.data.artwork_url,
+    engine: fetchResponse.data.search_engine,
+    artworkURL: fetchResponse.data.artwork_url,
     lyrics: fetchResponse.data.lyrics,
     status: fetchResponse.status,
   };
 }
+
 
 export { version, find };
