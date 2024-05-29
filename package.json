@@ -1,16 +1,17 @@
 {
   "name": "llyrics",
-  "version": "1.1.4-rc",
+  "version": "1.1.5",
   "description": "A simple package to fetch lyrics from Genius API",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
+  "module": "dist/src/index.mjs",
   "files": [
     "dist"
   ],
   "scripts": {
     "format": "prettier --write ./src/index.ts",
     "lint": "eslint src --ext .ts",
-    "build": "rimraf dist && tsc && gen-esm-wrapper ./dist/src/index.js ./dist/src/index.mjs",
+    "build": "rimraf dist && tsc && gen-esm-wrapper dist/src/index.js dist/src/index.mjs",
     "docs": "ts-docs",
     "fix": "eslint src --ext .ts --fix",
     "test": "ts-node ./test/index.test.ts"
