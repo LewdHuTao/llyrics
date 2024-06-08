@@ -73,6 +73,7 @@ client.login('token');
   engine: string,     // Search engine used
   artworkURL: string, // Artwork URL
   lyrics: string,     // Song lyrics
+  status: string,     // Response status code
 }
 ```
 
