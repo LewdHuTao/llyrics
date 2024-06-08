@@ -89,7 +89,7 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
   if (searchOptions.engine === 'genius' && searchOptions.geniusApiKey === undefined)
     throw new TypeError('A genius API key is required.');
 
-  const fetchParams = {
+  const fetchParams: { [key: string]: any } = {
     title: searchOptions.song,
   };
 
@@ -104,10 +104,7 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
           engine: currentEngine,
         });
 
-        if (
-          iterationSearch.status === 200 &&
-          iterationSearch.artist !== undefined
-        ) {
+        if (iterationSearch.status === 200 && iterationSearch.artist !== undefined) {
           return iterationSearch;
         }
       } catch (error) {
@@ -121,8 +118,7 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
       if (searchOptions.artist) Object.assign(fetchParams, { artist: searchOptions.artist });
       break;
     }
-    case 'genius':
-    default: {
+    case 'genius': {
       Object.assign(fetchParams, { api_key: searchOptions.geniusApiKey as string });
       break;
     }
@@ -132,6 +128,7 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
     `${apiBaseUrl}/${searchOptions.engine !== undefined ? searchOptions.engine : 'youtube'}/lyrics`,
     { params: fetchParams },
   );
+
   return {
     artist: fetchResponse.data.artist_name,
     title: fetchResponse.data.track_name,
@@ -142,6 +139,5 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
     status: fetchResponse.status,
   };
 }
-
 
 export { version, find };
