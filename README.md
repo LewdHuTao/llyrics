@@ -29,23 +29,23 @@ $ yarn add llyrics
 
 # 💾 Example
 ```js
-const { find } = require('llyrics');
+const { find } = require("llyrics");
 
-client.on(Events.InteractionCreate, async interaction => {
-	if (!interaction.isChatInputCommand()) return;
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
 
-    const response = await find({
-        song: 'Bohemian Rhapsody',
-        engine: 'youtube'
-        forceSearch: true,
-    });
+  const response = await find({
+    song: "Bohemian Rhapsody",
+    engine: "youtube",
+    forceSearch: true,
+  });
 
-	if (interaction.commandName === 'lyrics') {
-		await interaction.reply({ content: response.lyrics, ephemeral: true });
-	}
+  if (interaction.commandName === "lyrics") {
+    await interaction.reply({ content: response.lyrics, ephemeral: true });
+  }
 });
 
-client.login('token');
+client.login("token");
 ```
 
 # 🔧 Usage
