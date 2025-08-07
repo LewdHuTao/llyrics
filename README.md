@@ -15,7 +15,7 @@
 # 💫 Features
 
 - **TypeScript Support**: llyrics is written in TypeScript, providing type safety and ease of use. Thanks to [RemyK](https://github.com/RemyK888) for Typescript rewrite ❤.
-- **Support for Different Sources**: You can search for lyrics from YouTube, Musixmatch, or Genius by specifying the desired source(s) in the search options.
+- **Support for Different Sources**: You can search for lyrics from YouTube, Musixmatch, or by specifying the desired source(s) in the search options.
 - **Auto Search**: If a search fails on the first specified search engine, llyrics automatically retries the search on another available search engine for a better lyrics result.
 - **Easy to Use**: You can quickly search for song lyrics by providing the song title and, optionally, the artist name.
 
@@ -56,8 +56,7 @@ client.login("token");
 {
   song: string,                                 // The title of the song
   artist?: string,                              // Optional: Use this for more accurate lyrics results on the Musixmatch endpoint
-  geniusApiKey?: string,                        // Optional: API key for the Genius search engine
-  engine?: 'musixmatch' | 'genius' | 'youtube', // Specify the desired search engine: 'musixmatch', 'genius', or 'youtube'
+  engine?: 'musixmatch' | 'youtube',            // Specify the desired search engine: 'musixmatch', or 'youtube'
   forceSearch?: boolean                         // Optional: If true and the search fails on the first specified search engine, llyrics automatically retries the search on another available search engine
 }
 
@@ -76,8 +75,6 @@ client.login("token");
   status: string,     // Response status code
 }
 ```
-
-*Note: the id is only available if the request was made with Musixmatch. This corresponds to the Musixmatch identifier of the song.*
 
 The default search engine is YouTube. If you prefer not to use YouTube, you can specify your desired search engine.
 

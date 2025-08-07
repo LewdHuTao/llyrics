@@ -6,7 +6,6 @@ import { find } from '../src/index';
       song: "rickroll",
       engine: "youtube",
       forceSearch: true,
-      geniusApiKey: process.env.GENIUS_API || "", // Genius API Key
     });
 
     async function getLyrics() {
@@ -17,6 +16,7 @@ import { find } from '../src/index';
           console.log('Engine:', response.engine);
           console.log('Artwork URL:', response.artworkURL);
           console.log('Lyrics:', response.lyrics);
+          console.log('Status: ', response.status);
         } else {
           console.log('No lyrics found.');
         }
