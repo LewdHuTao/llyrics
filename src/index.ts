@@ -109,8 +109,6 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
     { params: fetchParams },
   );
 
-  console.log(fetchResponse);
-
   return {
     artist: fetchResponse.data.data.artistName,
     title: fetchResponse.data.data.trackName,
