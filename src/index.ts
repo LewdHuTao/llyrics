@@ -15,7 +15,7 @@ interface searchOptions {
   /**
    * Search engine. Only Musixmatch and YouTube are supported
    */
-  engine?: searchEngineOptions | string;
+  engine?: searchEngineOptions;
 
   /**
    * Changes search engine automatically if there are no results
@@ -63,7 +63,7 @@ interface fetchResponse {
 const apiBaseUrl = 'https://lyrics.lewdhutao.my.eu.org/v2';
 const searchEngines = ['youtube', 'musixmatch'] as const;
 
-type searchEngineOptions = (typeof searchEngines)[number];
+type searchEngineOptions = (typeof searchEngines)[number] | (string & {});
 
 /**
  * Finds the lyrics of a song.
