@@ -104,15 +104,14 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
     fetchParams.artist = searchOptions.artist;
   }
 
-  const fetchResponse = await axios.get(
-    `${apiBaseUrl}/${searchOptions.engine ?? 'youtube'}/lyrics`,
-    { params: fetchParams },
-  );
+  const fetchResponse = await axios.get(`${apiBaseUrl}/${searchOptions.engine ?? 'youtube'}/lyrics`, {
+    params: fetchParams,
+  });
 
   return {
     artist: fetchResponse.data.data.artistName,
     title: fetchResponse.data.data.trackName,
-    id: fetchResponse.data.data.trackId ,
+    id: fetchResponse.data.data.trackId,
     engine: fetchResponse.data.data.searchEngine,
     artworkURL: fetchResponse.data.data.artworkUrl,
     lyrics: fetchResponse.data.data.lyrics,
