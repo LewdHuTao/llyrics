@@ -78,7 +78,7 @@ type searchEngineOptions = (typeof searchEngines)[number] | (string & {});
  * console.log(response.artist);
  */
 async function find(searchOptions: searchOptions): Promise<fetchResponse> {
-  const fetchParams: { [key: string]: any } = {
+  const fetchParams: Record<string, string> = {
     title: searchOptions.song,
   };
 
