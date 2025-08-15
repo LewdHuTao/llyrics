@@ -15,7 +15,7 @@ interface searchOptions {
   /**
    * Search engine. Only Musixmatch and YouTube are supported
    */
-  engine?: searchEngineOptions | string;
+  engine?: searchEngineOptions;
 
   /**
    * Changes search engine automatically if there are no results
@@ -63,7 +63,7 @@ interface fetchResponse {
 const apiBaseUrl = 'https://lyrics.lewdhutao.my.eu.org/v2';
 const searchEngines = ['youtube', 'musixmatch'] as const;
 
-type searchEngineOptions = (typeof searchEngines)[number];
+type searchEngineOptions = (typeof searchEngines)[number] | (string & {});
 
 /**
  * Finds the lyrics of a song.
@@ -104,15 +104,14 @@ async function find(searchOptions: searchOptions): Promise<fetchResponse> {
     fetchParams.artist = searchOptions.artist;
   }
 
-  const fetchResponse = await axios.get(
-    `${apiBaseUrl}/${searchOptions.engine ?? 'youtube'}/lyrics`,
-    { params: fetchParams },
-  );
+  const fetchResponse = await axios.get(`${apiBaseUrl}/${searchOptions.engine ?? 'youtube'}/lyrics`, {
+    params: fetchParams,
+  });
 
   return {
     artist: fetchResponse.data.data.artistName,
     title: fetchResponse.data.data.trackName,
-    id: fetchResponse.data.data.trackId ,
+    id: fetchResponse.data.data.trackId,
     engine: fetchResponse.data.data.searchEngine,
     artworkURL: fetchResponse.data.data.artworkUrl,
     lyrics: fetchResponse.data.data.lyrics,
